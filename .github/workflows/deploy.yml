@@ -29,12 +29,12 @@ jobs:
           pip install ansible boto3
 
       # Step 4: Add your private key to SSH agent
-         - name: Setup SSH Key
-           run: |
-             mkdir -p ~/.ssh
-             echo "${{ secrets.LOCAL_PRIVATE_KEY }}" > ~/.ssh/deployer_key
-             chmod 600 ~/.ssh/deployer_key
-              ssh-keyscan -H 127.0.0.1 >> ~/.ssh/known_hosts
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.LOCAL_PRIVATE_KEY }}" > ~/.ssh/deployer_key
+          chmod 600 ~/.ssh/deployer_key
+          ssh-keyscan -H 127.0.0.1 >> ~/.ssh/known_hosts
 
 
 
