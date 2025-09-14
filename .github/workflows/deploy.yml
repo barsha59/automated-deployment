@@ -29,12 +29,13 @@ jobs:
           pip install ansible boto3
 
       # Step 4: Add your private key to SSH agent
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/deployer_key
-          chmod 600 ~/.ssh/deployer_key
-          ssh-keyscan -H ${{ secrets.WEB_EIP }} >> ~/.ssh/known_hosts
+- name: Setup SSH Key
+  run: |
+    mkdir -p ~/.ssh
+    echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/deployer_key
+    chmod 600 ~/.ssh/deployer_key
+    ssh-keyscan -H ${{ secrets.WEB_EIP }} >> ~/.ssh/known_hosts
+
 
       # Step 5: Run Ansible Playbook to deploy website
       - name: Run Ansible Playbook
