@@ -1,0 +1,19 @@
+# Terraform local files
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+*.tfplan
+
+# Python/Ansible cache
+__pycache__/
+*.pyc
+
+# Vagrant
+.vagrant/
+
+# SSH keys
+*.pem
+*.key
+
+# Docker
+*.log
