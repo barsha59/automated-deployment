@@ -1,0 +1,11 @@
+---
+- name: Copy app folder to remote server
+  copy:
+    src: ../app/
+    dest: /home/ubuntu/app/
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
+- name: Run Docker Compose
+  shell: docker compose -f /home/ubuntu/app/docker-compose.yml up -d

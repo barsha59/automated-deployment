@@ -1,0 +1,41 @@
+name: Terraform Apply
+
+on:
+  push:
+    paths:
+      - 'terraform/**'
+      - 'terraform.tf*'
+
+jobs:
+  terraform:
+    runs-on: [self-hosted, gh-runner]
+
+    steps:
+      # Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.0
+
+      # Initialize Terraform
+      - name: Terraform Init
+        run: terraform -chdir=terraform init
+
+      # Apply Terraform changes
+      - name: Terraform Apply
+        run: terraform -chdir=terraform apply -auto-approve
+
+      # Save outputs for Ansible
+      - name: Save Terraform Outputs
+        run: terraform -chdir=terraform output -json > tf_output.json
+
+      # Upload outputs as artifact
+      - name: Upload Terraform Outputs
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-output
+          path: tf_output.json
