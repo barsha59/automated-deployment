@@ -34,15 +34,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible boto3
 
-      # Setup SSH Key
-      - name: Setup SSH Key
+      # SSH KEY
+      - name: Setup SSH Key and Inventory
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.AWS_PRIVATE_KEY }}" > ~/.ssh/deployer_key
           chmod 600 ~/.ssh/deployer_key
-          # Fetch the Elastic IP from Terraform output JSON
+
+          # Get the public IP from Terraform output
           WEB_EIP=$(jq -r '.web_eip.value' ./terraform/tf_output.json)
+
+          # Add the host key to known_hosts
           ssh-keyscan -H $WEB_EIP >> ~/.ssh/known_hosts
+
+          # Create dynamic inventory file for Ansible
+          echo "[web]" > ansible/inventory.ini
+          echo "$WEB_EIP ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/deployer_key" >> ansible/inventory.ini
+
+      
 
       # Run Ansible playbook
       - name: Run Ansible Playbook
